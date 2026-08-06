@@ -1,0 +1,15 @@
+{
+  "name": "x-bek-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Portfolio website of Abdubannobov Xurshidbek — Backend Developer | Python & Django Engineer",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.2.0"
+  }
+}
