@@ -22,9 +22,9 @@ function socialIcon(key) { return ICONS[key] || ICONS.website; }
 /* --- Default Content Data --- */
 const DEFAULTS = {
   personal: {
-    name: "Abdubannobov Xurshidbek",
-    firstName: "Abdubannobov",
-    lastName: "Xurshidbek",
+    name: "Xurshidbek Abdubannobov",
+    firstName: "Xurshidbek",
+    lastName: "Abdubannobov",
     brand: "X. BEK",
     title: "Backend Developer | Python & Django Engineer",
     tagline: "I build scalable backend systems, REST APIs, and high-performance web applications using Python, Django, DRF, FastAPI, and PostgreSQL.",
@@ -32,19 +32,19 @@ const DEFAULTS = {
     bioLead: "Backend Developer with over 2 years of experience building scalable backend systems, REST APIs, and web applications.",
     bio: "I'm a Backend Developer with over 2 years of experience building scalable backend systems, REST APIs, and web applications using Python, Django, Django REST Framework, FastAPI, and PostgreSQL. I enjoy solving complex problems, designing clean architectures, and building products that create real value.\n\nBesides software development, I mentor backend students and have helped many aspiring developers improve their programming skills. I have solved 300+ LeetCode problems and actively participate in startup projects and hackathons.",
     location: "Fergana, Uzbekistan",
-    email: "your.email@example.com",
+    email: "abdubannobovx@gmail.com",
     phone: "+998 90 000 00 00",
-    photoUrl: "assets/portrait.jpg",
+    photoUrl: "assets/logo.jpg",
     yearsExperience: "2+",
     availableFor: "Open to Work",
     languages: "Uzbek, English",
     socials: {
-      github: "https://github.com/your-username",
-      linkedin: "https://linkedin.com/in/your-username",
-      telegram: "https://t.me/your-username",
-      email: "mailto:your.email@example.com",
-      website: "https://yourwebsite.com",
-      resume: "https://example.com/resume.pdf"
+      github: "https://github.com/AXurshidbek",
+      linkedin: "https://linkedin.com/in/abdubannobov",
+      telegram: "https://t.me/abdubannobov",
+      email: "mailto:abdubannobovx@gmail.com",
+      website: "https://www.fargoniy.uz/",
+      resume: ""
     }
   },
   education: [
@@ -56,11 +56,11 @@ const DEFAULTS = {
     { id: "x3", role: "Mathematics Teacher", company: "Educational Institution", location: "Fergana, Uzbekistan", start: "2023", end: "2024", current: false, description: "1 year experience teaching mathematics and analytical problem-solving logic.", bullets: ["Developed structured mathematical curricula and problem-solving methodologies", "Helped students build strong logical reasoning and algorithm fundamentals"] }
   ],
   projects: [
-    { id: "p1", title: "KarvonSaroy", description: "A comprehensive web platform for logistics and trade management with high-throughput backend architecture.", metric: "Scalable REST APIs & PostgreSQL Integration", tags: ["Python", "Django", "Django REST Framework", "PostgreSQL"], demoUrl: "https://example.com/karvonsaroy-demo", repoUrl: "https://github.com/your-username/karvonsaroy", featured: true },
-    { id: "p2", title: "CashVision", description: "Financial tracking and analytics system with real-time reporting and secure transaction authorization.", metric: "Real-time Financial Analytics Engine", tags: ["FastAPI", "Python", "PostgreSQL", "Redis"], demoUrl: "https://example.com/cashvision-demo", repoUrl: "https://github.com/your-username/cashvision", featured: true },
-    { id: "p3", title: "AdVista", description: "Digital advertisement management and targeting engine built for fast API response times.", metric: "High-concurrency RESTful API architecture", tags: ["Django", "DRF", "Redis", "Docker"], demoUrl: "https://example.com/advista-demo", repoUrl: "https://github.com/your-username/advista", featured: false },
-    { id: "p4", title: "InvestorOS", description: "An investment management platform allowing investors to track assets, returns, and portfolio distributions.", metric: "Secure Multi-tenant Backend System", tags: ["Python", "FastAPI", "PostgreSQL", "System Design"], demoUrl: "https://example.com/investoros-demo", repoUrl: "https://github.com/your-username/investoros", featured: false },
-    { id: "p5", title: "Multi Store E-commerce Platform", description: "Multi-tenant e-commerce system supporting multiple vendor storefronts, dynamic inventory, and checkout.", metric: "Multi-vendor Architecture & High Availability", tags: ["Django REST Framework", "PostgreSQL", "Redis", "Docker"], demoUrl: "https://example.com/multistore-demo", repoUrl: "https://github.com/your-username/multistore-ecommerce", featured: false }
+    { id: "p1", title: "KarvonSaroy", description: "A comprehensive web platform for logistics and trade management with high-throughput backend architecture.", metric: "Scalable REST APIs & PostgreSQL Integration", tags: ["Python", "Django", "Django REST Framework", "PostgreSQL"], demoUrl: "https://example.com/karvonsaroy-demo", repoUrl: "https://github.com/AXurshidbek/karvonsaroy", featured: true },
+    { id: "p2", title: "CashVision", description: "Financial tracking and analytics system with real-time reporting and secure transaction authorization.", metric: "Real-time Financial Analytics Engine", tags: ["FastAPI", "Python", "PostgreSQL", "Redis"], demoUrl: "https://example.com/cashvision-demo", repoUrl: "https://github.com/AXurshidbek/cashvision", featured: true },
+    { id: "p3", title: "AdVista", description: "Digital advertisement management and targeting engine built for fast API response times.", metric: "High-concurrency RESTful API architecture", tags: ["Django", "DRF", "Redis", "Docker"], demoUrl: "https://example.com/advista-demo", repoUrl: "https://github.com/AXurshidbek/advista", featured: false },
+    { id: "p4", title: "InvestorOS", description: "An investment management platform allowing investors to track assets, returns, and portfolio distributions.", metric: "Secure Multi-tenant Backend System", tags: ["Python", "FastAPI", "PostgreSQL", "System Design"], demoUrl: "https://example.com/investoros-demo", repoUrl: "https://github.com/AXurshidbek/investoros", featured: false },
+    { id: "p5", title: "Multi Store E-commerce Platform", description: "Multi-tenant e-commerce system supporting multiple vendor storefronts, dynamic inventory, and checkout.", metric: "Multi-vendor Architecture & High Availability", tags: ["Django REST Framework", "PostgreSQL", "Redis", "Docker"], demoUrl: "https://example.com/multistore-demo", repoUrl: "https://github.com/AXurshidbek/multistore-ecommerce", featured: false }
   ],
   competency: {
     hard: [
@@ -98,16 +98,16 @@ const DEFAULTS = {
   ],
   contact: {
     lead: "Reach out directly, or use the form — I read every message myself.",
-    email: "your.email@example.com",
+    email: "abdubannobovx@gmail.com",
     phone: "+998 90 000 00 00",
     location: "Fergana, Uzbekistan — remote-friendly",
     socials: {
-      github: "https://github.com/your-username",
-      linkedin: "https://linkedin.com/in/your-username",
-      telegram: "https://t.me/your-username",
-      email: "mailto:your.email@example.com",
-      website: "https://yourwebsite.com",
-      resume: "https://example.com/resume.pdf"
+      github: "https://github.com/AXurshidbek",
+      linkedin: "https://linkedin.com/in/abdubannobov",
+      telegram: "https://t.me/abdubannobov",
+      email: "mailto:abdubannobovx@gmail.com",
+      website: "https://www.fargoniy.uz/",
+      resume: ""
     }
   },
   admin: { password: "admin123" }
@@ -160,6 +160,7 @@ async function storageSet(key, value) {
 }
 
 async function loadAllData() {
+  const version = localStorage.getItem('site:schema_version');
   const [personal, education, experience, projects, competency, blog, contact, admin] = await Promise.all([
     storageGet('site:personal', clone(DEFAULTS.personal)),
     storageGet('site:education', clone(DEFAULTS.education)),
@@ -171,8 +172,11 @@ async function loadAllData() {
     storageGet('site:admin', clone(DEFAULTS.admin))
   ]);
 
-  if (!personal || !personal.name || personal.name.includes("Aria")) {
-    try { localStorage.clear(); } catch(e) {}
+  if (version !== '2.0' || !personal || !personal.name || personal.name.includes("Aria") || personal.name.includes("Novak") || (personal.photoUrl && personal.photoUrl.includes("portrait"))) {
+    try {
+      localStorage.clear();
+      localStorage.setItem('site:schema_version', '2.0');
+    } catch (e) { }
     STATE.personal = clone(DEFAULTS.personal);
     STATE.education = clone(DEFAULTS.education);
     STATE.experience = clone(DEFAULTS.experience);
@@ -258,13 +262,13 @@ function renderHero() {
   if (heroRole) heroRole.innerHTML = `<span>${p.title || ''}</span><span class="sep">/</span><span>${p.location || ''}</span>`;
   const heroTagline = document.getElementById('heroTagline');
   if (heroTagline) heroTagline.textContent = p.tagline || '';
-  
+
   const photoFrame = document.querySelector('.hero-photo-frame');
   if (photoFrame) {
     if (p.photoUrl) {
-      photoFrame.innerHTML = `<img id="heroPhoto" src="${p.photoUrl}" alt="${p.name || 'Portrait'}" onerror="this.parentElement.innerHTML='<div class=\\'hero-photo-placeholder\\'>${ICONS.user}<span>Photo unavailable</span></div>'">`;
+      photoFrame.innerHTML = `<img id="heroPhoto" src="${p.photoUrl}" alt="${p.name || 'Logo'}" onerror="this.parentElement.innerHTML='<div class=\\'hero-photo-placeholder\\'>${ICONS.user}<span>Photo unavailable</span></div>'">`;
     } else {
-      photoFrame.innerHTML = `<div class="hero-photo-placeholder">${ICONS.user}<span>${p.name || 'Abdubannobov Xurshidbek'}<br><small style="color:var(--slate-soft);font-size:11px;">Backend Developer</small></span></div>`;
+      photoFrame.innerHTML = `<div class="hero-photo-placeholder">${ICONS.user}<span>${p.name || 'Xurshidbek Abdubannobov'}<br><small style="color:var(--slate-soft);font-size:11px;">Backend Developer</small></span></div>`;
     }
   }
 
@@ -623,7 +627,7 @@ function wireAdminShell() {
   });
   const viewSiteBtn = document.getElementById('adminViewSiteBtn');
   if (viewSiteBtn) viewSiteBtn.addEventListener('click', exitAdminMode);
-  
+
   const logoutBtn = document.getElementById('adminLogoutBtn');
   if (logoutBtn) logoutBtn.addEventListener('click', () => {
     adminLoggedIn = false;
@@ -636,7 +640,7 @@ function wireAdminShell() {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(STATE, null, 2));
       const downloadAnchor = document.createElement('a');
       downloadAnchor.setAttribute("href", dataStr);
-      downloadAnchor.setAttribute("download", `portfolio_backup_${new Date().toISOString().slice(0,10)}.json`);
+      downloadAnchor.setAttribute("download", `portfolio_backup_${new Date().toISOString().slice(0, 10)}.json`);
       document.body.appendChild(downloadAnchor);
       downloadAnchor.click();
       downloadAnchor.remove();

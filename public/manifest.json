@@ -1,0 +1,16 @@
+{
+  "name": "Xurshidbek Abdubannobov — Backend Developer",
+  "short_name": "X. BEK",
+  "description": "Portfolio of Xurshidbek Abdubannobov, Backend Developer specializing in Python, Django, FastAPI, and PostgreSQL.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#101826",
+  "theme_color": "#101826",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23101826'/><circle cx='50' cy='50' r='20' fill='%23B9723E'/></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}
