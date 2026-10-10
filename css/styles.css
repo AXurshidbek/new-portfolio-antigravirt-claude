@@ -31,6 +31,28 @@
   --transition-normal: 0.25s ease;
 }
 
+[data-theme="dark"] {
+  --ink: #070B12;
+  --ink-soft: #0E1524;
+  --ink-line: rgba(255, 255, 255, 0.08);
+  --vellum: #0B111E;
+  --vellum-2: #121A2B;
+  --card: #131D2F;
+  --line: #223249;
+  --line-soft: #192538;
+  --copper: #E68A48;
+  --copper-deep: #F59E58;
+  --teal: #4FB0A4;
+  --ink-text: #F1F5F9;
+  --slate: #94A3B8;
+  --slate-soft: #64748B;
+  --paper-text: #F8FAFC;
+  --paper-text-dim: #94A3B8;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 12px 30px -10px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 20px 40px -15px rgba(0, 0, 0, 0.8);
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
 }
@@ -150,7 +172,7 @@ section {
   font-size: clamp(28px, 3.4vw, 42px);
   margin: 6px 0 0;
   letter-spacing: -0.01em;
-  color: var(--ink);
+  color: var(--ink-text);
 }
 
 /* ---------- Top Navigation ---------- */
@@ -181,7 +203,62 @@ header.topnav {
   align-items: center;
   gap: 10px;
   text-decoration: none;
-  color: var(--ink);
+  color: var(--ink-text);
+}
+
+/* ---------- Theme Switcher Button ---------- */
+.theme-toggle {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--ink-text);
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.theme-toggle:hover {
+  border-color: var(--copper);
+  color: var(--copper);
+  transform: translateY(-1px);
+}
+
+.theme-toggle svg {
+  position: absolute;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
+}
+
+/* Light mode: show moon, hide sun */
+:root .theme-toggle .icon-sun,
+[data-theme="light"] .theme-toggle .icon-sun {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.5);
+  pointer-events: none;
+}
+:root .theme-toggle .icon-moon,
+[data-theme="light"] .theme-toggle .icon-moon {
+  opacity: 1;
+  transform: rotate(0) scale(1);
+}
+
+/* Dark mode: show sun, hide moon */
+[data-theme="dark"] .theme-toggle .icon-sun {
+  opacity: 1;
+  transform: rotate(0) scale(1);
+  color: #F59E0B;
+}
+[data-theme="dark"] .theme-toggle .icon-moon {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.5);
+  pointer-events: none;
 }
 
 .brand .dot {
@@ -1700,6 +1777,183 @@ body.admin-mode .side-nav { display: none; }
   .admin-side-foot { display: none; }
   .admin-main { padding: 28px 20px; }
   .a-grid2 { grid-template-columns: 1fr; }
+}
+
+/* =========================================================================
+   DARK THEME COMPONENT OVERRIDES
+   ========================================================================= */
+[data-theme="dark"] header.topnav {
+  background: rgba(11, 17, 30, 0.88);
+  border-bottom: 1px solid var(--line-soft);
+}
+
+[data-theme="dark"] .mobile-menu.open {
+  background: var(--vellum);
+  border-top: 1px solid var(--line-soft);
+}
+
+[data-theme="dark"] .mobile-menu a {
+  border-bottom-color: var(--line-soft);
+  color: var(--ink-text);
+}
+
+.mobile-theme-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 4px;
+  border-bottom: 1px solid var(--line-soft);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-text);
+}
+
+[data-theme="dark"] .proj-grid {
+  background: var(--line-soft);
+  border-color: var(--line-soft);
+}
+
+[data-theme="dark"] .proj-card {
+  background: var(--card);
+}
+
+[data-theme="dark"] .proj-card:hover {
+  background: #18243A;
+}
+
+[data-theme="dark"] .proj-metric {
+  color: var(--copper);
+  border-top-color: var(--line);
+}
+
+[data-theme="dark"] .tag {
+  background: #0E1626;
+  border-color: var(--line-soft);
+  color: var(--slate);
+}
+
+[data-theme="dark"] .soft-pill {
+  background: var(--card);
+  border-color: var(--line);
+  color: var(--ink-text);
+}
+
+[data-theme="dark"] .blog-card {
+  background: var(--card);
+  border-color: var(--line-soft);
+}
+
+[data-theme="dark"] .blog-card:hover {
+  border-color: var(--line);
+}
+
+[data-theme="dark"] .blog-read {
+  color: var(--copper);
+}
+
+[data-theme="dark"] .blog-overlay {
+  background: var(--vellum);
+}
+
+[data-theme="dark"] .bo-topbar {
+  background: rgba(11, 17, 30, 0.94);
+  border-bottom: 1px solid var(--line-soft);
+}
+
+[data-theme="dark"] .bo-content h1,
+[data-theme="dark"] .bo-body {
+  color: var(--ink-text);
+}
+
+[data-theme="dark"] .bo-close {
+  border-color: var(--line);
+  color: var(--ink-text);
+}
+
+[data-theme="dark"] .bo-close:hover {
+  border-color: var(--copper);
+  color: var(--copper);
+}
+
+[data-theme="dark"] .btn-ghost.light {
+  border-color: var(--line);
+  color: var(--ink-text);
+}
+
+[data-theme="dark"] .btn-ghost.light:hover {
+  border-color: var(--copper);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+[data-theme="dark"] .admin-shell {
+  background: var(--vellum);
+}
+
+[data-theme="dark"] .admin-panel-card {
+  background: var(--card);
+  border-color: var(--line-soft);
+}
+
+[data-theme="dark"] .admin-panel-card h3,
+[data-theme="dark"] .admin-header h2 {
+  color: var(--ink-text);
+}
+
+[data-theme="dark"] .admin-list-item {
+  background: var(--card);
+  border-color: var(--line-soft);
+}
+
+[data-theme="dark"] .admin-list-item .aim-title {
+  color: var(--ink-text);
+}
+
+[data-theme="dark"] .a-field input,
+[data-theme="dark"] .a-field textarea,
+[data-theme="dark"] .a-field select {
+  background: #0E1624;
+  border-color: var(--line);
+  color: var(--ink-text);
+}
+
+[data-theme="dark"] .btn-sm {
+  background: var(--card);
+  border-color: var(--line);
+  color: var(--ink-text);
+}
+
+[data-theme="dark"] .btn-sm:hover {
+  border-color: var(--copper);
+}
+
+/* Cloud sync badge & pulse */
+.cloud-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: rgba(127, 194, 155, 0.12);
+  color: #7FC29B;
+  border: 1px solid rgba(127, 194, 155, 0.3);
+}
+
+.cloud-badge.offline {
+  background: rgba(227, 129, 129, 0.12);
+  color: #E38181;
+  border-color: rgba(227, 129, 129, 0.3);
+}
+
+.cloud-pulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 6px currentColor;
 }
 
 /* Print Stylesheet for Resume / CV Export */

@@ -1,0 +1,210 @@
+{
+  "updatedAt": "2026-10-10T19:15:00Z",
+  "personal": {
+    "name": "Xurshidbek Abdubannobov",
+    "firstName": "Xurshidbek",
+    "lastName": "Abdubannobov",
+    "brand": "X. BEK",
+    "title": "Backend Developer | Python & Django Engineer",
+    "tagline": "I build scalable backend systems, REST APIs, and high-performance web applications using Python, Django, DRF, FastAPI, and PostgreSQL.",
+    "availability": "Open to Work",
+    "bioLead": "Backend Developer with over 2 years of experience building scalable backend systems, REST APIs, and web applications.",
+    "bio": "I'm a Backend Developer with over 2 years of experience building scalable backend systems, REST APIs, and web applications using Python, Django, Django REST Framework, FastAPI, and PostgreSQL. I enjoy solving complex problems, designing clean architectures, and building products that create real value.\n\nBesides software development, I mentor backend students and have helped many aspiring developers improve their programming skills. I have solved 300+ LeetCode problems and actively participate in startup projects and hackathons.",
+    "location": "Fergana, Uzbekistan",
+    "email": "abdubannobovx@gmail.com",
+    "phone": "+998 90 000 00 00",
+    "photoUrl": "assets/logo.jpg",
+    "yearsExperience": "2+",
+    "availableFor": "Open to Work",
+    "languages": "Uzbek, English",
+    "socials": {
+      "github": "https://github.com/AXurshidbek",
+      "linkedin": "https://linkedin.com/in/AXurshidbek",
+      "telegram": "https://t.me/A_Xurshidbek",
+      "email": "mailto:abdubannobovx@gmail.com",
+      "website": "https://www.fargoniy.uz/",
+      "resume": ""
+    }
+  },
+  "education": [
+    {
+      "id": "e1",
+      "degree": "Bachelor of Digital Economy",
+      "institution": "Fergana State Technical University",
+      "location": "Fergana, Uzbekistan",
+      "start": "2022",
+      "end": "2026 (Expected)",
+      "description": "Focusing on digital economic systems, software engineering, software architecture, algorithms, and modern backend web technologies."
+    }
+  ],
+  "experience": [
+    {
+      "id": "x1",
+      "role": "Backend Developer",
+      "company": "Software Development",
+      "location": "Fergana, Uzbekistan",
+      "start": "2024",
+      "end": "Present",
+      "current": true,
+      "description": "Building scalable backend architectures, high-throughput REST APIs, and optimized database systems using Python, Django, DRF, FastAPI, and PostgreSQL.",
+      "bullets": [
+        "Architected scalable RESTful microservices and backend infrastructure using Python, Django REST Framework, and FastAPI",
+        "Optimized complex PostgreSQL database queries and schemas for high performance",
+        "Configured Redis caching, authentication systems, and Docker containerized deployments"
+      ]
+    },
+    {
+      "id": "x2",
+      "role": "Backend Mentor",
+      "company": "Codial IT Academy",
+      "location": "Fergana, Uzbekistan",
+      "start": "2024",
+      "end": "Present",
+      "current": true,
+      "description": "Mentoring backend development students and helping aspiring developers master Python, Django, and clean API design.",
+      "bullets": [
+        "Guided students through real-world backend projects and software architecture best practices",
+        "Taught REST API design, database modeling, and Git version control workflows",
+        "Evaluated student code reviews and helped developers refine technical problem-solving skills"
+      ]
+    },
+    {
+      "id": "x3",
+      "role": "Mathematics Teacher",
+      "company": "Educational Institution",
+      "location": "Fergana, Uzbekistan",
+      "start": "2023",
+      "end": "2024",
+      "current": false,
+      "description": "1 year experience teaching mathematics and analytical problem-solving logic.",
+      "bullets": [
+        "Developed structured mathematical curricula and problem-solving methodologies",
+        "Helped students build strong logical reasoning and algorithm fundamentals"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "id": "p1",
+      "title": "KarvonSaroy",
+      "description": "A comprehensive web platform for logistics and trade management with high-throughput backend architecture.",
+      "metric": "Scalable REST APIs & PostgreSQL Integration",
+      "tags": ["Python", "Django", "Django REST Framework", "PostgreSQL"],
+      "demoUrl": "https://example.com/karvonsaroy-demo",
+      "repoUrl": "https://github.com/AXurshidbek/karvonsaroy",
+      "featured": true
+    },
+    {
+      "id": "p2",
+      "title": "CashVision",
+      "description": "Financial tracking and analytics system with real-time reporting and secure transaction authorization.",
+      "metric": "Real-time Financial Analytics Engine",
+      "tags": ["FastAPI", "Python", "PostgreSQL", "Redis"],
+      "demoUrl": "https://example.com/cashvision-demo",
+      "repoUrl": "https://github.com/AXurshidbek/cashvision",
+      "featured": true
+    },
+    {
+      "id": "p3",
+      "title": "AdVista",
+      "description": "Digital advertisement management and targeting engine built for fast API response times.",
+      "metric": "High-concurrency RESTful API architecture",
+      "tags": ["Django", "DRF", "Redis", "Docker"],
+      "demoUrl": "https://example.com/advista-demo",
+      "repoUrl": "https://github.com/AXurshidbek/advista",
+      "featured": false
+    },
+    {
+      "id": "p4",
+      "title": "InvestorOS",
+      "description": "An investment management platform allowing investors to track assets, returns, and portfolio distributions.",
+      "metric": "Secure Multi-tenant Backend System",
+      "tags": ["Python", "FastAPI", "PostgreSQL", "System Design"],
+      "demoUrl": "https://example.com/investoros-demo",
+      "repoUrl": "https://github.com/AXurshidbek/investoros",
+      "featured": false
+    },
+    {
+      "id": "p5",
+      "title": "Multi Store E-commerce Platform",
+      "description": "Multi-tenant e-commerce system supporting multiple vendor storefronts, dynamic inventory, and checkout.",
+      "metric": "Multi-vendor Architecture & High Availability",
+      "tags": ["Django REST Framework", "PostgreSQL", "Redis", "Docker"],
+      "demoUrl": "https://example.com/multistore-demo",
+      "repoUrl": "https://github.com/AXurshidbek/multistore-ecommerce",
+      "featured": false
+    }
+  ],
+  "competency": {
+    "hard": [
+      { "id": "h1", "name": "Python", "level": 95 },
+      { "id": "h2", "name": "Django", "level": 92 },
+      { "id": "h3", "name": "Django REST Framework", "level": 90 },
+      { "id": "h4", "name": "FastAPI", "level": 88 },
+      { "id": "h5", "name": "PostgreSQL", "level": 88 },
+      { "id": "h6", "name": "SQLite", "level": 85 },
+      { "id": "h7", "name": "Redis", "level": 82 },
+      { "id": "h8", "name": "Docker", "level": 80 },
+      { "id": "h9", "name": "Git", "level": 90 },
+      { "id": "h10", "name": "GitHub", "level": 90 },
+      { "id": "h11", "name": "Linux", "level": 85 },
+      { "id": "h12", "name": "REST API", "level": 92 },
+      { "id": "h13", "name": "Authentication", "level": 90 },
+      { "id": "h14", "name": "Authorization", "level": 90 },
+      { "id": "h15", "name": "System Design", "level": 85 }
+    ],
+    "soft": [
+      { "id": "s1", "name": "Problem Solving" },
+      { "id": "s2", "name": "Leadership" },
+      { "id": "s3", "name": "Communication" },
+      { "id": "s4", "name": "Mentoring" },
+      { "id": "s5", "name": "Critical Thinking" },
+      { "id": "s6", "name": "Fast Learning" },
+      { "id": "s7", "name": "Teamwork" },
+      { "id": "s8", "name": "Time Management" }
+    ]
+  },
+  "blog": [
+    {
+      "id": "b1",
+      "title": "Solving 300+ LeetCode Problems: Key Backend Insights",
+      "date": "2026-06-10",
+      "tags": ["Algorithms", "Problem Solving"],
+      "excerpt": "Lessons learned from solving 300+ algorithmic challenges and how data structures directly inform backend system design.",
+      "content": "Solving over 300 algorithm problems on LeetCode transformed the way I think about software performance and memory management in production systems.\n\nIn backend engineering with Python and Django, understanding time and space complexity isn't just academic — it's the difference between a query taking 5 seconds or 50 milliseconds. Optimized data structures directly improve database index usage, caching strategy, and API response times."
+    },
+    {
+      "id": "b2",
+      "title": "Building Scalable REST APIs with Django & FastAPI",
+      "date": "2026-04-15",
+      "tags": ["Backend", "Python"],
+      "excerpt": "Comparing Django REST Framework and FastAPI for microservices, asynchronous execution, and database ORMs.",
+      "content": "When constructing backend systems, choosing between Django REST Framework and FastAPI depends on project requirements, ORM needs, and async concurrency.\n\nWhile DRF provides rapid scaffolding and powerful built-in ORM tools, FastAPI excels at high-concurrency async endpoints. In multi-tenant systems, combining robust PostgreSQL schema design with Redis caching yields resilient backend architectures."
+    },
+    {
+      "id": "b3",
+      "title": "Mentoring Next-Gen Backend Developers",
+      "date": "2026-02-20",
+      "tags": ["Mentoring", "Education"],
+      "excerpt": "What teaching at Codial IT Academy taught me about clean code, documentation, and engineering leadership.",
+      "content": "Teaching backend development at Codial IT Academy reinforced a fundamental principle: if you can't explain a software architecture concept simply, you don't understand it deeply enough.\n\nHelping aspiring engineers master Django, REST APIs, and database migrations improved my own code review standards and communication skills as a developer."
+    }
+  ],
+  "contact": {
+    "lead": "Reach out directly, or use the form — I read every message myself.",
+    "email": "abdubannobovx@gmail.com",
+    "phone": "+998 90 000 00 00",
+    "location": "Fergana, Uzbekistan — remote-friendly",
+    "socials": {
+      "github": "https://github.com/AXurshidbek",
+      "linkedin": "https://linkedin.com/in/AXurshidbek",
+      "telegram": "https://t.me/A_Xurshidbek",
+      "email": "mailto:abdubannobovx@gmail.com",
+      "website": "https://www.fargoniy.uz/",
+      "resume": ""
+    }
+  },
+  "admin": {
+    "password": "admin123"
+  }
+}

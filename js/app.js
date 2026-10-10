@@ -40,8 +40,8 @@ const DEFAULTS = {
     languages: "Uzbek, English",
     socials: {
       github: "https://github.com/AXurshidbek",
-      linkedin: "https://linkedin.com/in/abdubannobov",
-      telegram: "https://t.me/abdubannobov",
+      linkedin: "https://linkedin.com/in/AXurshidbek",
+      telegram: "https://t.me/A_Xurshidbek",
       email: "mailto:abdubannobovx@gmail.com",
       website: "https://www.fargoniy.uz/",
       resume: ""
@@ -103,8 +103,8 @@ const DEFAULTS = {
     location: "Fergana, Uzbekistan — remote-friendly",
     socials: {
       github: "https://github.com/AXurshidbek",
-      linkedin: "https://linkedin.com/in/abdubannobov",
-      telegram: "https://t.me/abdubannobov",
+      linkedin: "https://linkedin.com/in/AXurshidbek",
+      telegram: "https://t.me/A_Xurshidbek",
       email: "mailto:abdubannobovx@gmail.com",
       website: "https://www.fargoniy.uz/",
       resume: ""
@@ -126,6 +126,74 @@ const STATE = {
   contact: clone(DEFAULTS.contact),
   admin: clone(DEFAULTS.admin)
 };
+
+/* --- Cloud Storage & Sync Engine --- */
+const DEFAULT_CLOUD_ENDPOINT = 'https://kvdb.io/GbEtEsmYpRjAN6ev1PDmcb/portfolio_state';
+
+function getCloudEndpoint() {
+  return localStorage.getItem('site:cloud_endpoint') || DEFAULT_CLOUD_ENDPOINT;
+}
+
+function setCloudEndpoint(url) {
+  if (url && url.trim()) {
+    localStorage.setItem('site:cloud_endpoint', url.trim());
+  } else {
+    localStorage.removeItem('site:cloud_endpoint');
+  }
+}
+
+async function fetchCloudState() {
+  const url = getCloudEndpoint();
+  if (!url) return null;
+  try {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 3500);
+    const res = await fetch(url, { signal: ctrl.signal });
+    clearTimeout(timer);
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.personal && data.personal.name) {
+        return data;
+      }
+    }
+  } catch (err) {
+    console.warn('Cloud fetch warning (using local fallback):', err);
+  }
+  return null;
+}
+
+async function pushCloudState(state) {
+  const url = getCloudEndpoint();
+  if (!url) return false;
+  try {
+    const payload = {
+      ...state,
+      updatedAt: new Date().toISOString()
+    };
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    return res.ok;
+  } catch (err) {
+    console.warn('Cloud push error:', err);
+    return false;
+  }
+}
+
+async function fetchStaticContent() {
+  try {
+    const res = await fetch('data/content.json');
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.personal && data.personal.name) {
+        return data;
+      }
+    }
+  } catch (err) { }
+  return null;
+}
 
 /* --- Browser Storage Engine --- */
 async function storageGet(key, fallback) {
@@ -159,43 +227,146 @@ async function storageSet(key, value) {
   }
 }
 
-async function loadAllData() {
-  const version = localStorage.getItem('site:schema_version');
-  const [personal, education, experience, projects, competency, blog, contact, admin] = await Promise.all([
-    storageGet('site:personal', clone(DEFAULTS.personal)),
-    storageGet('site:education', clone(DEFAULTS.education)),
-    storageGet('site:experience', clone(DEFAULTS.experience)),
-    storageGet('site:projects', clone(DEFAULTS.projects)),
-    storageGet('site:competency', clone(DEFAULTS.competency)),
-    storageGet('site:blog', clone(DEFAULTS.blog)),
-    storageGet('site:contact', clone(DEFAULTS.contact)),
-    storageGet('site:admin', clone(DEFAULTS.admin))
+async function saveAllData(toastMsg = 'Saved.') {
+  // 1. Save to local storage for immediate persistence
+  await Promise.all([
+    storageSet('site:personal', STATE.personal),
+    storageSet('site:education', STATE.education),
+    storageSet('site:experience', STATE.experience),
+    storageSet('site:projects', STATE.projects),
+    storageSet('site:competency', STATE.competency),
+    storageSet('site:blog', STATE.blog),
+    storageSet('site:contact', STATE.contact),
+    storageSet('site:admin', STATE.admin)
   ]);
 
-  if (version !== '2.0' || !personal || !personal.name || personal.name.includes("Aria") || personal.name.includes("Novak") || (personal.photoUrl && personal.photoUrl.includes("portrait"))) {
+  // 2. Broadcast to global cloud database so it works for all visitors on any device/browser
+  showToast(toastMsg + ' Syncing to cloud…');
+  const cloudOk = await pushCloudState(STATE);
+  if (cloudOk) {
+    showToast(toastMsg + ' Synced live to cloud for all visitors! ☁️');
+  } else {
+    showToast(toastMsg + ' Saved locally (cloud sync offline).');
+  }
+}
+
+async function loadAllData() {
+  // 1. First priority: Check Live Global Cloud
+  const cloudData = await fetchCloudState();
+  if (cloudData && cloudData.personal && !cloudData.personal.name.includes('Aria')) {
+    STATE.personal = cloudData.personal;
+    STATE.education = cloudData.education || [];
+    STATE.experience = cloudData.experience || [];
+    STATE.projects = cloudData.projects || [];
+    STATE.competency = cloudData.competency || { hard: [], soft: [] };
+    STATE.blog = cloudData.blog || [];
+    STATE.contact = cloudData.contact || clone(DEFAULTS.contact);
+    STATE.admin = cloudData.admin || clone(DEFAULTS.admin);
+
+    // Cache locally for offline availability
     try {
-      localStorage.clear();
-      localStorage.setItem('site:schema_version', '2.0');
+      localStorage.setItem('site:schema_version', '2.2');
+      localStorage.setItem('site:personal', JSON.stringify(STATE.personal));
+      localStorage.setItem('site:education', JSON.stringify(STATE.education));
+      localStorage.setItem('site:experience', JSON.stringify(STATE.experience));
+      localStorage.setItem('site:projects', JSON.stringify(STATE.projects));
+      localStorage.setItem('site:competency', JSON.stringify(STATE.competency));
+      localStorage.setItem('site:blog', JSON.stringify(STATE.blog));
+      localStorage.setItem('site:contact', JSON.stringify(STATE.contact));
+      localStorage.setItem('site:admin', JSON.stringify(STATE.admin));
     } catch (e) { }
-    STATE.personal = clone(DEFAULTS.personal);
-    STATE.education = clone(DEFAULTS.education);
-    STATE.experience = clone(DEFAULTS.experience);
-    STATE.projects = clone(DEFAULTS.projects);
-    STATE.competency = clone(DEFAULTS.competency);
-    STATE.blog = clone(DEFAULTS.blog);
-    STATE.contact = clone(DEFAULTS.contact);
-    STATE.admin = clone(DEFAULTS.admin);
     return;
   }
 
-  STATE.personal = personal;
-  STATE.education = education;
-  STATE.experience = experience;
-  STATE.projects = projects;
-  STATE.competency = competency;
-  STATE.blog = blog;
-  STATE.contact = contact;
-  STATE.admin = admin;
+  // 2. Second priority: Local Storage Cache
+  const version = localStorage.getItem('site:schema_version');
+  const [personal, education, experience, projects, competency, blog, contact, admin] = await Promise.all([
+    storageGet('site:personal', null),
+    storageGet('site:education', null),
+    storageGet('site:experience', null),
+    storageGet('site:projects', null),
+    storageGet('site:competency', null),
+    storageGet('site:blog', null),
+    storageGet('site:contact', null),
+    storageGet('site:admin', null)
+  ]);
+
+  if (version === '2.2' && personal && personal.name && !personal.name.includes('Aria')) {
+    STATE.personal = personal;
+    STATE.education = education || [];
+    STATE.experience = experience || [];
+    STATE.projects = projects || [];
+    STATE.competency = competency || { hard: [], soft: [] };
+    STATE.blog = blog || [];
+    STATE.contact = contact || clone(DEFAULTS.contact);
+    STATE.admin = admin || clone(DEFAULTS.admin);
+    return;
+  }
+
+  // 3. Third priority: Static content.json
+  const staticData = await fetchStaticContent();
+  if (staticData && staticData.personal && !staticData.personal.name.includes('Aria')) {
+    STATE.personal = staticData.personal;
+    STATE.education = staticData.education || [];
+    STATE.experience = staticData.experience || [];
+    STATE.projects = staticData.projects || [];
+    STATE.competency = staticData.competency || { hard: [], soft: [] };
+    STATE.blog = staticData.blog || [];
+    STATE.contact = staticData.contact || clone(DEFAULTS.contact);
+    STATE.admin = staticData.admin || clone(DEFAULTS.admin);
+    return;
+  }
+
+  // 4. Default fallback
+  STATE.personal = clone(DEFAULTS.personal);
+  STATE.education = clone(DEFAULTS.education);
+  STATE.experience = clone(DEFAULTS.experience);
+  STATE.projects = clone(DEFAULTS.projects);
+  STATE.competency = clone(DEFAULTS.competency);
+  STATE.blog = clone(DEFAULTS.blog);
+  STATE.contact = clone(DEFAULTS.contact);
+  STATE.admin = clone(DEFAULTS.admin);
+}
+
+/* --- Theme Management --- */
+function initTheme() {
+  const getPreferredTheme = () => {
+    const saved = localStorage.getItem('site:theme');
+    if (saved === 'dark' || saved === 'light') return saved;
+    return (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+  };
+
+  const applyTheme = (theme) => {
+    document.documentElement.setAttribute('data-theme', theme);
+    const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+    if (themeColorMeta) {
+      themeColorMeta.setAttribute('content', theme === 'dark' ? '#0B111E' : '#101826');
+    }
+  };
+
+  const toggleTheme = () => {
+    const current = document.documentElement.getAttribute('data-theme') || 'light';
+    const next = current === 'dark' ? 'light' : 'dark';
+    applyTheme(next);
+    localStorage.setItem('site:theme', next);
+    showToast(`Switched to ${next === 'dark' ? 'Dark' : 'Light'} mode`);
+  };
+
+  applyTheme(getPreferredTheme());
+
+  const toggleBtn = document.getElementById('themeToggleBtn');
+  if (toggleBtn) toggleBtn.addEventListener('click', toggleTheme);
+
+  const mobileToggleBtn = document.getElementById('mobileThemeToggleBtn');
+  if (mobileToggleBtn) mobileToggleBtn.addEventListener('click', toggleTheme);
+
+  if (window.matchMedia) {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      if (!localStorage.getItem('site:theme')) {
+        applyTheme(e.matches ? 'dark' : 'light');
+      }
+    });
+  }
 }
 
 function uid(prefix) { return prefix + '_' + Math.random().toString(36).slice(2, 9); }
@@ -218,8 +389,27 @@ function buildNav() {
   const sideNav = document.getElementById('sideNav');
   if (navLinks) navLinks.innerHTML = SECTIONS.map(s => `<a href="#${s.id}" data-sec="${s.id}">${s.label}</a>`).join('');
   if (mobileMenu) {
-    mobileMenu.innerHTML = SECTIONS.map(s => `<a href="#${s.id}" data-sec="${s.id}">${s.label}</a>`).join('') +
+    mobileMenu.innerHTML =
+      `<div class="mobile-theme-row">
+        <span>Appearance</span>
+        <button class="theme-toggle" id="mobileThemeToggleBtn" aria-label="Toggle theme">
+          <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+      </div>` +
+      SECTIONS.map(s => `<a href="#${s.id}" data-sec="${s.id}">${s.label}</a>`).join('') +
       `<div class="nav-social" id="mobileSocial"></div>`;
+
+    const mToggle = document.getElementById('mobileThemeToggleBtn');
+    if (mToggle) {
+      mToggle.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme') || 'light';
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('site:theme', next);
+        showToast(`Switched to ${next === 'dark' ? 'Dark' : 'Light'} mode`);
+      });
+    }
   }
   if (sideNav) sideNav.innerHTML = SECTIONS.map(s => `<a href="#${s.id}" data-sec="${s.id}"><span class="tip">${s.label}</span></a>`).join('');
 
@@ -528,6 +718,7 @@ const ADMIN_TABS = [
   { id: 'competency', label: 'Competency' },
   { id: 'blog', label: 'Blog' },
   { id: 'contact', label: 'Contact & Security' },
+  { id: 'cloud', label: 'Cloud & Sync ☁️' }
 ];
 
 function enterAdminMode() {
@@ -606,6 +797,7 @@ function adminShellTemplate() {
           ${ADMIN_TABS.map(t => `<button data-tab="${t.id}" class="${t.id === adminActiveTab ? 'active' : ''}">${t.label}</button>`).join('')}
         </div>
         <div class="admin-side-foot">
+          <button class="btn-sm" id="adminQuickSyncBtn" style="background:var(--copper);color:#ffffff;border:none;width:100%;font-weight:600;margin-bottom:8px;cursor:pointer;">☁️ Sync to Cloud Now</button>
           <button class="btn-sm" id="adminExportBtn" style="background:transparent;color:var(--paper-text-dim);border-color:var(--ink-line);width:100%;">Export Data (JSON)</button>
           <button class="btn-sm" id="adminImportBtn" style="background:transparent;color:var(--paper-text-dim);border-color:var(--ink-line);width:100%;">Import Data (JSON)</button>
           <input type="file" id="adminImportFile" accept=".json" style="display:none;">
@@ -634,6 +826,22 @@ function wireAdminShell() {
     renderAdminRoot();
   });
 
+  const quickSyncBtn = document.getElementById('adminQuickSyncBtn');
+  if (quickSyncBtn) {
+    quickSyncBtn.addEventListener('click', async () => {
+      quickSyncBtn.disabled = true;
+      quickSyncBtn.textContent = 'Syncing...';
+      const ok = await pushCloudState(STATE);
+      if (ok) {
+        showToast('Successfully synced to cloud for all visitors! ☁️');
+      } else {
+        showToast('Sync failed. Please check network connection.');
+      }
+      quickSyncBtn.disabled = false;
+      quickSyncBtn.textContent = '☁️ Sync to Cloud Now';
+    });
+  }
+
   const exportBtn = document.getElementById('adminExportBtn');
   if (exportBtn) {
     exportBtn.addEventListener('click', () => {
@@ -661,17 +869,7 @@ function wireAdminShell() {
           const imported = JSON.parse(evt.target.result);
           if (imported && imported.personal) {
             Object.assign(STATE, imported);
-            await Promise.all([
-              storageSet('site:personal', STATE.personal),
-              storageSet('site:education', STATE.education),
-              storageSet('site:experience', STATE.experience),
-              storageSet('site:projects', STATE.projects),
-              storageSet('site:competency', STATE.competency),
-              storageSet('site:blog', STATE.blog),
-              storageSet('site:contact', STATE.contact),
-              storageSet('site:admin', STATE.admin)
-            ]);
-            showToast('Portfolio data restored successfully!');
+            await saveAllData('Portfolio data restored & synced to cloud!');
             renderAdminTab();
           } else {
             alert('Invalid portfolio backup file format.');
@@ -695,7 +893,8 @@ function renderAdminTab() {
     projects: adminRenderList('projects'),
     competency: adminRenderCompetency,
     blog: adminRenderList('blog'),
-    contact: adminRenderContact
+    contact: adminRenderContact,
+    cloud: adminRenderCloud
   };
   main.innerHTML = '';
   if (renderers[adminActiveTab]) renderers[adminActiveTab](main);
@@ -784,8 +983,7 @@ function adminRenderPersonal(main) {
         resume: v('pResume')
       }
     };
-    await storageSet('site:personal', STATE.personal);
-    showToast('Personal info saved.');
+    await saveAllData('Personal info saved.');
   });
 }
 
@@ -839,11 +1037,10 @@ function renderListItems(kind, items) {
       const id = e.target.closest('.admin-list-item').dataset.id;
       if (!confirm('Delete this entry? This cannot be undone.')) return;
       STATE[kind] = STATE[kind].filter(i => i.id !== id);
-      await storageSet('site:' + kind, STATE[kind]);
+      await saveAllData('Entry deleted.');
       renderListItems(kind, STATE[kind]);
       const formWrap = document.getElementById('formWrap');
       if (formWrap) formWrap.innerHTML = '';
-      showToast('Entry deleted.');
     });
   });
 }
@@ -943,11 +1140,10 @@ function renderItemForm(kind, item) {
 async function saveListItem(kind, id, data) {
   const idx = STATE[kind].findIndex(i => i.id === id);
   if (idx > -1) STATE[kind][idx] = data; else STATE[kind].push(data);
-  await storageSet('site:' + kind, STATE[kind]);
+  await saveAllData('Saved.');
   renderListItems(kind, STATE[kind]);
   const formWrap = document.getElementById('formWrap');
   if (formWrap) formWrap.innerHTML = '';
-  showToast('Saved.');
 }
 
 /* Admin: Competency */
@@ -1033,8 +1229,7 @@ function adminRenderCompetency(main) {
       if (s) { s.name = row.querySelector('.s-name').value; }
     });
     STATE.competency = comp;
-    await storageSet('site:competency', STATE.competency);
-    showToast('Competency saved.');
+    await saveAllData('Competency saved.');
   });
 }
 
@@ -1076,8 +1271,98 @@ function adminRenderContact(main) {
       }
     };
     STATE.admin = { password: v('cAdminPass') || DEFAULTS.admin.password };
-    await Promise.all([storageSet('site:contact', STATE.contact), storageSet('site:admin', STATE.admin)]);
-    showToast('Contact & Security saved.');
+    await saveAllData('Contact & Security saved.');
+  });
+}
+
+/* Admin: Cloud & Global Sync */
+function adminRenderCloud(main) {
+  const currentEndpoint = getCloudEndpoint();
+  main.innerHTML = `
+    <div class="admin-header">
+      <div><span class="mono-label">Realtime Worldwide Synchronization</span><h2>Cloud & Global Sync ☁️</h2></div>
+    </div>
+    
+    <div class="admin-panel-card">
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+        <span style="display:inline-block; width:12px; height:12px; border-radius:50%; background:#10B981; box-shadow:0 0 10px #10B981;"></span>
+        <strong style="font-size:16px;">Global Live Sync is Active</strong>
+      </div>
+      <p style="color:var(--slate); margin-bottom:16px; line-height:1.6;">
+        Your changes are saved to an open, global Cloud KV Database. Whenever you update anything in this admin panel, it is broadcast live so that <strong>all visitors across all browsers and devices</strong> will instantly see your new content, projects, and posts!
+      </p>
+
+      <div class="a-field">
+        <label>Cloud Database Endpoint (KV Store)</label>
+        <input type="text" id="cloudEndpointInput" value="${currentEndpoint.replace(/"/g, '&quot;')}" style="font-family:var(--font-mono); font-size:13px;">
+      </div>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:16px;">
+        <button class="btn-sm primary" id="cloudPushBtn">🚀 Push Local Changes to Cloud</button>
+        <button class="btn-sm" id="cloudPullBtn">⬇️ Pull Latest from Cloud</button>
+        <button class="btn-sm" id="cloudResetEndpointBtn">↺ Reset to Default Cloud URL</button>
+      </div>
+    </div>
+
+    <div class="admin-panel-card">
+      <h3>Static Repository Content</h3>
+      <p style="color:var(--slate); margin-bottom:16px; line-height:1.6;">
+        Want to save your current portfolio state directly into your git repository? Click below to download the compiled <code>content.json</code> file, which you can place in <code>public/data/content.json</code> for permanent offline repository bundling.
+      </p>
+      <button class="btn-sm" id="cloudDownloadJsonBtn" style="border-color:var(--copper); color:var(--copper);">📥 Download data/content.json</button>
+    </div>
+  `;
+
+  document.getElementById('cloudPushBtn').addEventListener('click', async () => {
+    const btn = document.getElementById('cloudPushBtn');
+    btn.disabled = true;
+    btn.textContent = 'Pushing to cloud...';
+    const ok = await pushCloudState(STATE);
+    if (ok) {
+      showToast('Successfully published all changes to the cloud! Visible to everyone worldwide. 🌍');
+    } else {
+      showToast('Failed to connect to cloud endpoint. Check network connection.');
+    }
+    btn.disabled = false;
+    btn.textContent = '🚀 Push Local Changes to Cloud';
+  });
+
+  document.getElementById('cloudPullBtn').addEventListener('click', async () => {
+    const btn = document.getElementById('cloudPullBtn');
+    btn.disabled = true;
+    btn.textContent = 'Fetching from cloud...';
+    const cloudData = await fetchCloudState();
+    if (cloudData && cloudData.personal) {
+      Object.assign(STATE, cloudData);
+      await saveAllData('Pulled latest cloud state successfully! ☁️');
+      renderAdminTab();
+    } else {
+      showToast('Could not fetch remote state or cloud store is empty.');
+    }
+    btn.disabled = false;
+    btn.textContent = '⬇️ Pull Latest from Cloud';
+  });
+
+  document.getElementById('cloudResetEndpointBtn').addEventListener('click', () => {
+    setCloudEndpoint(DEFAULT_CLOUD_ENDPOINT);
+    document.getElementById('cloudEndpointInput').value = DEFAULT_CLOUD_ENDPOINT;
+    showToast('Reset endpoint to default global cloud.');
+  });
+
+  document.getElementById('cloudEndpointInput').addEventListener('change', (e) => {
+    setCloudEndpoint(e.target.value);
+    showToast('Cloud endpoint updated.');
+  });
+
+  document.getElementById('cloudDownloadJsonBtn').addEventListener('click', () => {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(STATE, null, 2));
+    const a = document.createElement('a');
+    a.href = dataStr;
+    a.download = "content.json";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    showToast('content.json downloaded.');
   });
 }
 
@@ -1085,6 +1370,7 @@ function adminRenderContact(main) {
    APPLICATION INITIALIZATION
    ========================================================================= */
 (async function init() {
+  initTheme();
   buildNav();
   initChrome();
   await loadAllData();
